@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Surprise</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    width: 350px;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+    color: #444;
+}
+
+.gift {
+    font-size: 80px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.gift:hover {
+    transform: scale(1.2);
+}
+
+.hidden {
+    display: none;
+}
+
+#message h2 {
+    color: #ff4081;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background: #ff4081;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e91e63;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1 id="title">🎁 Tap the Gift 🎁</h1>
+
+    <div class="gift" onclick="openGift()">🎁</div>
+
+    <div id="message" class="hidden">
+        <h2>🎉 Happy Birthday in Advance 🎉</h2>
+        <p>
+            May your life be filled with joy, success, and beautiful moments.
+            This little surprise is made just for you 💖
+        </p>
+        <button onclick="replay()">Replay 🎂</button>
+    </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+const message = document.getElementById("message");
+const title = document.getElementById("title");
+const gift = document.querySelector(".gift");
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confetti = [];
+
+function openGift() {
+    gift.style.display = "none";
+    title.innerText = "🎉 Surprise 🎉";
+    message.classList.remove("hidden");
+    startConfetti();
+}
+
+function replay() {
+    message.classList.add("hidden");
+    gift.style.display = "block";
+    title.innerText = "🎁 Tap the Gift 🎁";
+    confetti = [];
+}
+
+function startConfetti() {
+    confetti = [];
+    for (let i = 0; i < 150; i++) {
+        confetti.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 6 + 2,
+            d: Math.random() * 5,
+            color: `hsl(${Math.random() * 360},100%,50%)`
+        });
+    }
+    animateConfetti();
+}
+
+function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confetti.forEach((c, i) => {
+        ctx.beginPath();
+        ctx.fillStyle = c.color;
+        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        c.y += c.d;
+        if (c.y > canvas.height) confetti[i].y = 0;
+    });
+    requestAnimationFrame(animateConfetti);
+}
+</script>
+
+</body>
+</html>
