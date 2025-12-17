@@ -2,69 +2,106 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Birthday Surprise</title>
+<title>Birthday Surprise 🎉</title>
 
 <style>
+* { box-sizing: border-box; }
+
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+  margin: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #ff758c, #6a11cb);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
 }
 
 .card {
-    background: white;
-    padding: 30px;
-    width: 350px;
-    text-align: center;
-    border-radius: 20px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.3);
+  padding: 30px;
+  border-radius: 18px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
-h1 {
-    color: #444;
-}
+.step { display: none; animation: slide 0.6s ease; }
+.step.active { display: block; }
 
-.gift {
-    font-size: 80px;
-    cursor: pointer;
-    transition: transform 0.3s;
-}
-
-.gift:hover {
-    transform: scale(1.2);
-}
-
-.hidden {
-    display: none;
-}
-
-#message h2 {
-    color: #ff4081;
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
 }
 
 button {
-    padding: 10px 20px;
-    border: none;
-    background: #ff4081;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
+  background: #ffd700;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover { background: #ffea70; }
+
+.error {
+  color: #ffcccc;
+  font-size: 14px;
+  margin-top: 10px;
+  display: none;
 }
 
-button:hover {
-    background: #e91e63;
+.shake { animation: shake 0.4s; }
+
+@keyframes slide {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+/* Gift Box */
+.gift-box {
+  font-size: 90px;
+  cursor: pointer;
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.click-text {
+  margin-top: 10px;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
 }
 </style>
 </head>
@@ -72,74 +109,117 @@ canvas {
 <body>
 
 <div class="card">
-    <h1 id="title">🎁 Tap the Gift 🎁</h1>
+  <h2>🎉 Birthday Wish 🎉</h2>
 
-    <div class="gift" onclick="openGift()">🎁</div>
+  <!-- STEP 1 -->
+  <div class="step active" id="step1">
+    <p>Sabse pehle apna naam batao 😊</p>
+    <input id="name" placeholder="Yahan apna naam likho">
+    <div class="error" id="nameError">Naam likhna zaroori hai ✨</div>
+    <button onclick="checkName()">Next ➡️</button>
+  </div>
 
-    <div id="message" class="hidden">
-        <h2>🎉 Happy Birthday  🎉</h2>
-        <p>
-            May your life be filled with joy, success, and beautiful moments.
-            This little surprise is made just for you 💖
-        </p>
-        <button onclick="replay()">Replay 🎂</button>
-    </div>
+  <!-- STEP 2 -->
+  <div class="step" id="step2">
+    <p>Main tumhe kaise refer karoon?</p>
+    <select id="gender">
+      <option value="he">He</option>
+      <option value="she">She</option>
+    </select>
+    <button onclick="nextStep(3)">Next ➡️</button>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step3">
+    <p>Tum kis type ke insaan ho?</p>
+    <select id="vibe">
+      <option>Jo sabke chehre pe smile laata/laati hai ✨</option>
+      <option>Strong aur kabhi haar na manne wala/wali 💪</option>
+      <option>Dil se bahut achhe/achhi ❤️</option>
+      <option>Thode crazy but bahut lovable 😄</option>
+    </select>
+    <button onclick="nextStep(4)">Next ➡️</button>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="step4">
+    <p>Agar tumhe ek word mein describe karoon, toh?</p>
+    <select id="word">
+      <option>Special 🌟</option>
+      <option>Inspiring 🔥</option>
+      <option>Andar se bahut khoobsurat 💖</option>
+      <option>Bilkul unforgettable 💫</option>
+    </select>
+    <button onclick="generateWish()">🎂 Wish Banao</button>
+  </div>
+
+  <!-- GIFT -->
+  <div class="step" id="giftStep">
+    <h3>🎁 A Special Gift For You</h3>
+    <div class="gift-box" onclick="openGift()">🎁</div>
+    <div class="click-text">Click Me to Open 💝</div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="step" id="result">
+    <h3>🎁 Sirf Tumhare Liye</h3>
+    <p id="wish"></p>
+  </div>
 </div>
 
-<canvas id="confetti"></canvas>
-
 <script>
-const message = document.getElementById("message");
-const title = document.getElementById("title");
-const gift = document.querySelector(".gift");
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
+function nextStep(step) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById("step" + step).classList.add("active");
+}
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function checkName() {
+  const name = document.getElementById("name");
+  const error = document.getElementById("nameError");
+  if (name.value.trim() === "") {
+    error.style.display = "block";
+    name.classList.add("shake");
+    setTimeout(() => name.classList.remove("shake"), 400);
+  } else {
+    error.style.display = "none";
+    nextStep(2);
+  }
+}
 
-let confetti = [];
+function generateWish() {
+  const name = document.getElementById("name").value;
+  const vibe = document.getElementById("vibe").value;
+  const word = document.getElementById("word").value;
+
+  const wishes = [
+    `Happy Birthday ${name}! 🎉 Tum sach mein ${word} ho. ${vibe} — aur jahan jaate/jaati ho wahan positivity fail jaati hai. Yeh saal tumhare liye khushiyon aur success se bhara ho 💖`,
+    `${name}, aaj sirf tumhara birthday nahi 🎂 balki yeh yaad dilane ka din hai ki tum kitne khaas ho. Hamesha khush raho aur muskurate raho ✨`,
+    `Happy Birthday ${name}! 🎈 Tum jaisa insaan bahut kam milta hai. Hamesha khud par bharosa rakhna — tum perfect ho 🌟`
+  ];
+
+  window.finalWish = wishes[Math.floor(Math.random() * wishes.length)];
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById("giftStep").classList.add("active");
+}
 
 function openGift() {
-    gift.style.display = "none";
-    title.innerText = "🎉 Surprise 🎉";
-    message.classList.remove("hidden");
-    startConfetti();
+  createConfetti();
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById("result").classList.add("active");
+  document.getElementById("wish").innerText = window.finalWish;
 }
 
-function replay() {
-    message.classList.add("hidden");
-    gift.style.display = "block";
-    title.innerText = "🎁 Tap the Gift 🎁";
-    confetti = [];
-}
-
-function startConfetti() {
-    confetti = [];
-    for (let i = 0; i < 150; i++) {
-        confetti.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            r: Math.random() * 6 + 2,
-            d: Math.random() * 5,
-            color: `hsl(${Math.random() * 360},100%,50%)`
-        });
-    }
-    animateConfetti();
-}
-
-function animateConfetti() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    confetti.forEach((c, i) => {
-        ctx.beginPath();
-        ctx.fillStyle = c.color;
-        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        c.y += c.d;
-        if (c.y > canvas.height) confetti[i].y = 0;
-    });
-    requestAnimationFrame(animateConfetti);
+function createConfetti() {
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.backgroundColor =
+      ["#ffd700","#ff4d6d","#6a11cb","#00f2fe"][Math.floor(Math.random()*4)];
+    c.style.animationDuration = Math.random()*2 + 2 + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
 }
 </script>
 
